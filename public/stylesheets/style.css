@@ -1,0 +1,139 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Candal', sans-serif;
+}
+
+/* Body Styling */
+body {
+    background: linear-gradient(135deg, #e27442, #d24c2b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Todo Container */
+.todo-container {
+    color: white;
+    padding: 20px;
+    width: 600px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* Heading */
+.todo-container h2 {
+    padding: 10px;
+    font-size: 2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Todo Form */
+.todo {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Input Field */
+.todo-header input {
+    width: 85%;
+    border: none;
+    border-radius: 8px;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 1em;
+    outline: none;
+}
+
+/* Add Button */
+.todo-header button {
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 8px;
+    background-color: rgb(51, 212, 100);
+    transition: 0.3s ease;
+}
+
+.todo-header button:hover {
+    background-color: rgb(42, 180, 85);
+}
+
+/* Todo List */
+.todo-container ul {
+    list-style: none;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Todo List Item */
+.todo-list-item {
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.3s ease;
+}
+
+.todo-list-item:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Todo Item Name */
+.todo-list-item div {
+    flex-grow: 2;
+    font-size: 1em;
+}
+
+/* Buttons */
+.todo-list-item a {
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 1.2em;
+    transition: 0.3s ease;
+}
+
+/* Edit Button */
+.todo-list-item .edit {
+    color: rgb(143, 233, 58);
+}
+
+.todo-list-item .edit:hover {
+    color: rgb(114, 198, 46);
+}
+
+/* Delete Button */
+.todo-list-item .remove {
+    color: rgb(243, 96, 96);
+}
+
+.todo-list-item .remove:hover {
+    color: rgb(200, 50, 50);
+}
+
+/* Cancel Button */
+.todo-list-item .cancel {
+    color: white;
+    background-color: rgb(223, 43, 43);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.3s ease;
+}
+
+.todo-list-item .cancel:hover {
+    background-color: rgb(180, 30, 30);
+}
