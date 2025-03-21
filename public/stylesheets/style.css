@@ -13,6 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    text-align: center;
 }
 
 /* Todo Container */
@@ -30,7 +31,7 @@ body {
 }
 
 /* Heading */
-.todo-container h2 {
+.todo-container h2, .todo-container h1 {
     padding: 10px;
     font-size: 2em;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -42,9 +43,8 @@ body {
     max-width: 400px;
 }
 
-/* Input Field */
 .todo-header input {
-    width: 85%;
+    width: 70%;
     border: none;
     border-radius: 8px;
     height: 30px;
@@ -53,7 +53,6 @@ body {
     outline: none;
 }
 
-/* Add Button */
 .todo-header button {
     color: white;
     border: none;
@@ -69,13 +68,13 @@ body {
 }
 
 /* Todo List */
-.todo-container ul {
-    list-style: none;
+.todo-list {
+    list-style-type: none;
+    padding: 0;
     width: 100%;
     margin-top: 10px;
 }
 
-/* Todo List Item */
 .todo-list-item {
     padding: 12px;
     margin-top: 10px;
@@ -85,16 +84,21 @@ body {
     align-items: center;
     justify-content: space-between;
     transition: 0.3s ease;
+    border-bottom: 1px solid #ddd;
 }
 
 .todo-list-item:hover {
     background: rgba(0, 0, 0, 0.5);
 }
 
-/* Todo Item Name */
 .todo-list-item div {
     flex-grow: 2;
     font-size: 1em;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
 }
 
 /* Buttons */
@@ -105,7 +109,6 @@ body {
     transition: 0.3s ease;
 }
 
-/* Edit Button */
 .todo-list-item .edit {
     color: rgb(143, 233, 58);
 }
@@ -114,7 +117,6 @@ body {
     color: rgb(114, 198, 46);
 }
 
-/* Delete Button */
 .todo-list-item .remove {
     color: rgb(243, 96, 96);
 }
@@ -123,7 +125,6 @@ body {
     color: rgb(200, 50, 50);
 }
 
-/* Cancel Button */
 .todo-list-item .cancel {
     color: white;
     background-color: rgb(223, 43, 43);

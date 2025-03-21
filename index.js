@@ -56,6 +56,17 @@ app.post("/", async (req, res) => {
   }
 });
 
+//UPDATE Task Completion
+app.put("/tasks/:id/complete", async (req, res) => {
+  try {
+      await TodoTask.findByIdAndUpdate(req.params.id, { completed: req.body.completed });
+      res.status(200).send("Task updated");
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 // Route for deleting a task
 app.get('/remove/:id', async (req, res) => {
   try {

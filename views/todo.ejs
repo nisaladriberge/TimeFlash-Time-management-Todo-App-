@@ -19,7 +19,7 @@
         <div class="todo">
             <!-- Todo Form -->
             <form action="/" method="POST" class="todo-header">
-                <input type="text" name="content" placeholder="Add a new task">
+                <input type="text" name="content" placeholder="Add a new task" required>
                 <button type="submit">
                     <span class="fas fa-plus"></span>
                 </button>
@@ -30,7 +30,9 @@
                 <% if(locals.tasks && tasks.length > 0) { %>
                     <% tasks.forEach(task => { %>
                         <li class="todo-list-item">
-                            <div class="todo-list-item-name"><%= task.content %></div>
+                            <input type="checkbox" class="mark-completed" data-id="<%= task._id %>" <%= task.completed ? 'checked' : '' %>>
+                            <span class="todo-text <%= task.completed ? 'completed' : '' %>"><%= task.content %></span>
+                            <small><%= task.date.toDateString() %></small>
                             <a href="/edit/<%= task._id %>" class="edit">
                                 <span class="fas fa-edit"></span>
                             </a>
@@ -47,5 +49,22 @@
             </ul>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll(".mark-completed").forEach(checkbox => {
+            checkbox.addEventListener("change", async (event) => {
+                const taskId = event.target.getAttribute("data-id");
+                const completed = event.target.checked;
+                
+                await fetch(`/tasks/${taskId}/complete`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ completed })
+                });
+
+                event.target.nextElementSibling.classList.toggle("completed", completed);
+            });
+        });
+    </script>
 </body>
 </html>
