@@ -1,0 +1,11 @@
+MongoDB Atlas Cluster https://www.mongodb.com/atlas
+
+Cluster Details
+Cluster Name: flashfire
+Username: nisala20230320
+Password: shamindhA
+
+Connect to Cluster0
+Add your connection string into your application code:
+mongodb+srv://nisala20230320:<db_password>@flashfire.ifnyq.mongodb.net/?retryWrites=true&w=majority&appName=Flashfire
+Replace <db_password> with the password for the todoListApp user.
