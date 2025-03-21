@@ -56,6 +56,20 @@ app.post("/", async (req, res) => {
   }
 });
 
+// Route for deleting a task
+app.get('/remove/:id', async (req, res) => {
+  try {
+    // Find the task by ID and remove it
+    await TodoTask.findByIdAndDelete(req.params.id);
+    
+    // Redirect back to the main page
+    res.redirect('/');
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    res.status(500).send("Error deleting task");
+  }
+});
+
 // Connect to MongoDB using Mongoose
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
