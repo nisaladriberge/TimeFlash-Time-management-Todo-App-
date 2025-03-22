@@ -15,6 +15,10 @@
 </head>
 <body>
     <div class="todo-container">
+        <div class="user-info">
+            Welcome, <%= user.username %> | <a href="/auth/logout">Logout</a>
+        </div>
+        
         <h2>To-Do List</h2>
         <div class="todo">
             <!-- Todo Form -->
@@ -61,7 +65,7 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ completed })
                 });
-
+                
                 event.target.nextElementSibling.classList.toggle("completed", completed);
             });
         });

@@ -8,12 +8,13 @@
 
 /* Body Styling */
 body {
-    background: linear-gradient(135deg, #e27442, #d24c2b);
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     text-align: center;
+    transition: background 0.5s ease-in-out;
 }
 
 /* Todo Container */
@@ -21,20 +22,25 @@ body {
     color: white;
     padding: 20px;
     width: 600px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-in-out;
+}
+
+.todo-container:hover {
+    transform: scale(1.02);
 }
 
 /* Heading */
 .todo-container h2, .todo-container h1 {
     padding: 10px;
     font-size: 2em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Todo Form */
@@ -51,6 +57,11 @@ body {
     padding: 5px 10px;
     font-size: 1em;
     outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.todo-header input:focus {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .todo-header button {
@@ -59,12 +70,13 @@ body {
     border-radius: 50%;
     cursor: pointer;
     padding: 8px;
-    background-color: rgb(51, 212, 100);
-    transition: 0.3s ease;
+    background-color: #007bff;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .todo-header button:hover {
-    background-color: rgb(42, 180, 85);
+    background-color: #0056b3;
+    transform: scale(1.1);
 }
 
 /* Todo List */
@@ -79,16 +91,15 @@ body {
     padding: 12px;
     margin-top: 10px;
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: 0.3s ease;
-    border-bottom: 1px solid #ddd;
+    transition: background 0.3s ease;
 }
 
 .todo-list-item:hover {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .todo-list-item div {
@@ -106,35 +117,121 @@ body {
     text-decoration: none;
     margin: 0 5px;
     font-size: 1.2em;
-    transition: 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+.todo-list-item a:hover {
+    transform: scale(1.2);
 }
 
 .todo-list-item .edit {
-    color: rgb(143, 233, 58);
+    color: #28a745;
 }
 
 .todo-list-item .edit:hover {
-    color: rgb(114, 198, 46);
+    color: #218838;
 }
 
 .todo-list-item .remove {
-    color: rgb(243, 96, 96);
+    color: #dc3545;
 }
 
 .todo-list-item .remove:hover {
-    color: rgb(200, 50, 50);
+    color: #c82333;
 }
 
 .todo-list-item .cancel {
     color: white;
-    background-color: rgb(223, 43, 43);
+    background-color: #dc3545;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     padding: 5px;
-    transition: 0.3s ease;
+    transition: background-color 0.3s;
 }
 
 .todo-list-item .cancel:hover {
-    background-color: rgb(180, 30, 30);
+    background-color: #c82333;
+}
+
+/* Authentication Styles */
+.auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.form-group input:focus {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.auth-button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.auth-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.auth-options {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.auth-options a {
+    color: white;
+    text-decoration: underline;
+}
+
+.error-message {
+    background-color: rgba(255, 0, 0, 0.3);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.user-info {
+    align-self: flex-end;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.user-info a {
+    color: white;
+    text-decoration: underline;
 }

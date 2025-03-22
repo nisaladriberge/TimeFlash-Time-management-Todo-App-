@@ -8,12 +8,20 @@ const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const TodoTask = require("./models/TodoTask");
+const cookieParser = require('cookie-parser');
+
+// Load routes
+const authRoutes = require('./routes/auth');
+
+// Load middleware
+const { authenticate } = require('./middleware/auth');
 
 dotenv.config();
 
-// Middleware to parse form data and JSON data
+// Middleware to parse form data, JSON data, and cookies
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Serve static files from the "public" directory
 app.use("/static", express.static("public"));
@@ -21,14 +29,27 @@ app.use("/static", express.static("public"));
 // Set EJS as the template engine
 app.set("view engine", "ejs");
 
+// Use authentication routes
+app.use('/auth', authRoutes);
+
+// Protected routes - require authentication
+app.use(authenticate);
+
 // Define a route handler for GET request to fetch and display tasks
 app.get('/', async (req, res) => {
   try {
-    const tasks = await TodoTask.find(); // Retrieve all tasks from the database
-    res.render('todo.ejs', { tasks: tasks }); // Pass tasks to the frontend
+    // Retrieve all tasks for the current user
+    const tasks = await TodoTask.find({ user: req.user._id });
+    res.render('todo.ejs', { 
+      tasks: tasks,
+      user: req.user
+    });
   } catch (err) {
     console.error("Error fetching tasks:", err);
-    res.render('todo.ejs', { tasks: [] }); // Pass empty array if error
+    res.render('todo.ejs', { 
+      tasks: [],
+      user: req.user
+    });
   }
 });
 
@@ -37,7 +58,8 @@ app.post("/", async (req, res) => {
   try {
     // Create a new todoTask instance
     const todoTask = new TodoTask({
-      content: req.body.content // Assign posted value to "content"
+      content: req.body.content,
+      user: req.user._id // Associate task with current user
     });
     
     // Save the new document in the database
@@ -59,17 +81,40 @@ app.post("/", async (req, res) => {
 //UPDATE Task Completion
 app.put("/tasks/:id/complete", async (req, res) => {
   try {
-      await TodoTask.findByIdAndUpdate(req.params.id, { completed: req.body.completed });
-      res.status(200).send("Task updated");
+    // Make sure the task belongs to the current user
+    const task = await TodoTask.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    });
+    
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    
+    await TodoTask.findByIdAndUpdate(req.params.id, { 
+      completed: req.body.completed 
+    });
+    
+    res.status(200).send("Task updated");
   } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
 // Route for deleting a task
 app.get('/remove/:id', async (req, res) => {
   try {
+    // Make sure the task belongs to the current user
+    const task = await TodoTask.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    });
+    
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    
     // Find the task by ID and remove it
     await TodoTask.findByIdAndDelete(req.params.id);
     
