@@ -1,100 +1,75 @@
-// Load the express module
+// Load modules
 const express = require('express');
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
+const TodoTask = require("./models/TodoTask");
+const authRoutes = require('./routes/auth');
+const { authenticate } = require('./middleware/auth');
+
+// Initialize environment variables
+dotenv.config();
 
 // Create an Express app
 const app = express();
 
-// Load environment variables
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const TodoTask = require("./models/TodoTask");
-const cookieParser = require('cookie-parser');
-
-// Load routes
-const authRoutes = require('./routes/auth');
-
-// Load middleware
-const { authenticate } = require('./middleware/auth');
-
-dotenv.config();
-
-// Middleware to parse form data, JSON data, and cookies
+// Middleware setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// Serve static files from the "public" directory
+// Serve static files
 app.use("/static", express.static("public"));
 
 // Set EJS as the template engine
 app.set("view engine", "ejs");
 
-// Use authentication routes
+// Use routes
 app.use('/auth', authRoutes);
 
-// Protected routes - require authentication
+// Protected routes
 app.use(authenticate);
 
-// Define a route handler for GET request to fetch and display tasks
+// Home route - Fetch tasks
 app.get('/', async (req, res) => {
   try {
-    // Retrieve all tasks for the current user
     const tasks = await TodoTask.find({ user: req.user._id });
-    res.render('todo.ejs', { 
-      tasks: tasks,
-      user: req.user
-    });
+    res.render('todo.ejs', { tasks, user: req.user });
   } catch (err) {
     console.error("Error fetching tasks:", err);
-    res.render('todo.ejs', { 
-      tasks: [],
-      user: req.user
-    });
+    res.render('todo.ejs', { tasks: [], user: req.user });
   }
 });
 
-// Handle a POST request to create a new task
+// Create new task
 app.post("/", async (req, res) => {
   try {
-    // Create a new todoTask instance
     const todoTask = new TodoTask({
       content: req.body.content,
-      user: req.user._id // Associate task with current user
+      user: req.user._id
     });
-    
-    // Save the new document in the database
     await todoTask.save();
-    
-    // Reload the page to the root path
     res.redirect("/");
   } catch (err) {
     console.error("Error saving task:", err);
-    
-    // Send an error response with status 500
     res.status(500).send("Internal Server Error");
-    
-    // Reload the page to the root path
-    res.redirect("/");
   }
 });
 
-//UPDATE Task Completion
+// Update task completion
 app.put("/tasks/:id/complete", async (req, res) => {
   try {
-    // Make sure the task belongs to the current user
     const task = await TodoTask.findOne({
       _id: req.params.id,
       user: req.user._id
     });
-    
-    if (!task) {
-      return res.status(404).send("Task not found");
-    }
-    
-    await TodoTask.findByIdAndUpdate(req.params.id, { 
-      completed: req.body.completed 
+
+    if (!task) return res.status(404).send("Task not found");
+
+    await TodoTask.findByIdAndUpdate(req.params.id, {
+      completed: req.body.completed
     });
-    
+
     res.status(200).send("Task updated");
   } catch (err) {
     console.error(err);
@@ -102,23 +77,17 @@ app.put("/tasks/:id/complete", async (req, res) => {
   }
 });
 
-// Route for deleting a task
+// Delete a task
 app.get('/remove/:id', async (req, res) => {
   try {
-    // Make sure the task belongs to the current user
     const task = await TodoTask.findOne({
       _id: req.params.id,
       user: req.user._id
     });
-    
-    if (!task) {
-      return res.status(404).send("Task not found");
-    }
-    
-    // Find the task by ID and remove it
+
+    if (!task) return res.status(404).send("Task not found");
+
     await TodoTask.findByIdAndDelete(req.params.id);
-    
-    // Redirect back to the main page
     res.redirect('/');
   } catch (err) {
     console.error("Error deleting task:", err);
@@ -126,17 +95,19 @@ app.get('/remove/:id', async (req, res) => {
   }
 });
 
-// Connect to MongoDB using Mongoose
+// Connect to MongoDB and start server
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => {
-  console.log("Connected to db");
-  
-  // Start the server after successful DB connection
-  app.listen(3000, () => {
-    console.log("Server is up and running on port 3000");
+  console.log("Connected to MongoDB");
+
+  // Use dynamic port for deployment
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+    console.log(`Server is up and running on port ${PORT}`);
   });
 })
 .catch((err) => {
